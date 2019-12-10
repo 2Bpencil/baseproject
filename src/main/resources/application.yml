@@ -1,15 +1,20 @@
 #访问端口
 server:
-  port: 8084
+  port: 9527
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    session:
+      timeout: 60  # session超时时间为60秒
 
 spring:
     #***************************************数据源配置***************************************
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
-        driverClassName: com.mysql.jdbc.Driver
-        driver-class-name: com.mysql.jdbc.Driver
+        driverClassName: com.mysql.cj.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
         platform: mysql
-        url: jdbc:mysql://localhost:3306/boot?useUnicode=true&characterEncoding=utf-8&useSSL=false
+        url: jdbc:mysql://localhost:3306/base_db?serverTimezone=GMT&useUnicode=true&characterEncoding=utf-8&useSSL=false
         username: root
         password: root
         initialSize: 5
@@ -28,7 +33,7 @@ spring:
     jpa:
       hibernate:
         ddl-auto: update
-      show-sql: true
+      show-sql: false
     #******************************************视图配置*****************************************
     thymeleaf:
       #开启模板缓存（默认值：true）
@@ -52,10 +57,24 @@ spring:
       prefix: classpath:/templates/
       #在构建URL时添加到视图名称后的后缀（默认值：.html）
       suffix: .html
+    http:
+      encoding:
+        charset: UTF-8
+        force: true
+        enabled: true
+
+
+    activiti:
+      check-process-definitions: true
+
 #******************************************日志配置*****************************************
-logging:
-  config: classpath:logback-spring.xml
-  path: F:/log
+#logging:
+ # file: springboot.log
+  #level.root: info
+#  level.com.tyf.springbootdemo.config: info
+
+
+
 
 
 

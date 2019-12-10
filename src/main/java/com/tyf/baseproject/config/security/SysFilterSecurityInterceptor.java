@@ -1,5 +1,4 @@
 package com.tyf.baseproject.config.security;
-import javax.servlet.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +9,16 @@ import org.springframework.security.access.intercept.InterceptorStatusToken;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.*;
 import java.io.IOException;
+
+/**
+* @Description:  Security 拦截器
+* @Param:
+* @return:
+* @Author: Mr.Tan
+* @Date: 2019/10/8 9:22
+*/
 @Service
 public class SysFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
     private final static Logger logger = LoggerFactory.getLogger(SysFilterSecurityInterceptor.class);

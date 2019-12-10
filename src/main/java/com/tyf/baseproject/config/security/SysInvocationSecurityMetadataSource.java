@@ -3,7 +3,7 @@ package com.tyf.baseproject.config.security;
 import com.tyf.baseproject.code.dao.MenuRepository;
 import com.tyf.baseproject.code.entity.Menu;
 import com.tyf.baseproject.code.entity.Role;
-import com.tyf.baseproject.code.service.impl.RoleServiceImpl;
+import com.tyf.baseproject.code.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -15,11 +15,16 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+/**
+* @Description:  初始化权限资源
+* @Author: Mr.Tan
+* @Date: 2019/10/8 9:23
+*/
 @Service
 public class SysInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
-    private RoleServiceImpl roleService;
+    private RoleService roleService;
     @Autowired
     private MenuRepository menuRepository;
 
@@ -37,7 +42,7 @@ public class SysInvocationSecurityMetadataSource implements FilterInvocationSecu
             array = new ArrayList<>();
             List<Role> roles = roleService.findByMenuId(menu.getId());
             for (Role role:roles ) {
-                cfg = new SecurityConfig(role.getName());
+                cfg = new SecurityConfig(role.getAuthority());
                 //此处只添加了用户的名字，其实还可以添加更多权限的信息，例如请求方法到ConfigAttribute的集合中去。此处添加的信息将会作为MyAccessDecisionManager类的decide的第三个参数。
                 array.add(cfg);
             }
@@ -57,6 +62,7 @@ public class SysInvocationSecurityMetadataSource implements FilterInvocationSecu
         HttpServletRequest request = ((FilterInvocation) object).getHttpRequest();
         AntPathRequestMatcher matcher;
         String resUrl;
+
         for(Iterator<String> iter = map.keySet().iterator(); iter.hasNext(); ) {
             resUrl = iter.next();
             matcher = new AntPathRequestMatcher(resUrl);
@@ -64,8 +70,6 @@ public class SysInvocationSecurityMetadataSource implements FilterInvocationSecu
                 return map.get(resUrl);
             }
         }
-
-
         return null;
     }
 

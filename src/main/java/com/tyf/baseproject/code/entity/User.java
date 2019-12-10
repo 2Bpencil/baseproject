@@ -3,11 +3,13 @@ package com.tyf.baseproject.code.entity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 @Entity
 @Table(name = "user")
 public class User implements UserDetails {
@@ -17,8 +19,14 @@ public class User implements UserDetails {
     private Integer id;
     @Column(length = 20)
     private String username;
-    @Column(length = 50)
+    @Column(length = 20)
+    private String phone;
+    @Column(length = 100)
     private String password;
+    @Column
+    private Integer sex;
+    @Column(length = 20)
+    private String realName;
     @Column
     private Boolean isAccountNonExpired = true;
     @Column
@@ -34,7 +42,7 @@ public class User implements UserDetails {
         List<GrantedAuthority> auths = new ArrayList<>();
         List<Role> roles = this.getRoles();
         for (Role role : roles) {
-            auths.add(new SimpleGrantedAuthority(role.getName()));
+            auths.add(new SimpleGrantedAuthority(role.getAuthority()));
         }
         return auths;
     }
@@ -50,7 +58,9 @@ public class User implements UserDetails {
     public void setUsername(String username) {
         this.username = username;
     }
-    public void setPassword(String password) {
+    public void setPassword(String password) {//加密
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        password = passwordEncoder.encode(password);
         this.password = password;
     }
 
@@ -106,5 +116,29 @@ public class User implements UserDetails {
 
     public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 }
