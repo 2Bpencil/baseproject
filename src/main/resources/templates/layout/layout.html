@@ -34,6 +34,7 @@
     <div id="wrapper">
         <nav class="navbar-default navbar-static-side" role="navigation">
             <input  type="hidden" id="curMenu" th:value="${session.curMenu}">
+            <input  type="hidden" id="curUserId" th:value="${session.CurUser.id}">
             <div class="sidebar-collapse">
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
@@ -192,6 +193,8 @@
         }
         /*获取应用的根目录，我的绝对路径是*/
         var contextPath = $('#contextPath').attr('href');
+        var websocketPath = contextPath.replace('http','ws');
+        console.log(websocketPath);
     </script>
     <div th:include="::jsDiv">
 

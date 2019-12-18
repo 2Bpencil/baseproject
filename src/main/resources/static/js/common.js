@@ -2,8 +2,10 @@
 // Spring Security 原本是 防止 CSRF 攻击 现在 ajax 被误伤了...
 var header = $("meta[name='_csrf_header']").attr("content");
 var token =$("meta[name='_csrf']").attr("content");
+var socket;
 $(document).ready(function(){
     validatePasswordData();
+    initWebsocket();
 });
 
 /**
@@ -144,4 +146,51 @@ function validatePasswordData(){
 
         }
     });
+
+}
+
+/**
+ * 初始化websocket
+ */
+function initWebsocket(){
+
+    if(typeof(WebSocket) == "undefined") {
+        console.log("您的浏览器不支持WebSocket");
+    }else{
+        console.log("您的浏览器支持WebSocket");
+
+        //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+
+        socket = new WebSocket(websocketPath+"websocket/"+$('#curUserId').val());
+        //打开事件
+        socket.onopen = function() {
+            console.log("Socket 已打开");
+        };
+        //获得消息事件
+        socket.onmessage = function(msg) {
+            console.log(msg);
+        };
+        //关闭事件
+        socket.onclose = function() {
+            console.log("Socket已关闭");
+        };
+        //发生了错误事件
+        socket.onerror = function() {
+            alert("Socket发生了错误");
+        }
+
+        //关闭连接
+        function closeWebSocket() {
+            socket.close();
+        }
+
+    }
+
+}
+function sendMessage() {
+    if(typeof(WebSocket) == "undefined") {
+        console.log("您的浏览器不支持WebSocket");
+    }else {
+        socket.send('哈哈哈');
+    }
 }
